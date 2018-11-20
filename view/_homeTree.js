@@ -14,7 +14,10 @@ class example {
     }
     view(vnode) {
         return m("home-tree", [
-            m("home-tree-add-button", "+"),
+            m("home-tree-add-button", {onclick: () => {
+                d.toAddTree();
+                // console.log('asd')
+            }}, "+"),
             d.rawData.map((singleTree, i) => {
                 return m("home-tree-label", {onclick: () => {
                     d.toSetTree(i);

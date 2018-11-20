@@ -1,3 +1,6 @@
+body {
+    background-color: cadetblue;
+}
 home {
     display: flex;
     flex-direction: column;
@@ -34,6 +37,15 @@ home-branch {
     display: flex;
     flex-direction: column;
     margin: 20px 0px 0px 40px;
+    &-add {
+        &-button {
+            margin: 0px 0px 0px 10px;
+            padding: 5px;
+            &:hover {
+                background-color: aqua;
+            }
+        }
+    }
 }
 home-leaf {
     &-tick {

@@ -1,6 +1,6 @@
 let m = require('mithril');
 let leaf = require("./_homeLeaf");
-// let d = require('../model/data');
+let d = require('../model/data');
 
 class branch {
     constructor() {
@@ -16,11 +16,18 @@ class branch {
     view(vnode) {
         this.label = vnode.attrs.label;
         this.leaves = vnode.attrs.leaves
+        // this.pos = vnode.attrs.pos;
         return m("home-branch", [
             m("home-branch-label", this.label),
             this.leaves.map((singleLeaf) => {
-                return m(leaf, {label: singleLeaf.name, state: singleLeaf.done})
-            })
+                return m(leaf, {label: singleLeaf.name, state: singleLeaf.state})
+            }),
+            m("home-branch-add", [
+                m("home-branch-add-label", "New task"),
+                m("home-branch-add-button", {onclick: () => {
+                    d.toAddLeaf(vnode.attrs.treePos, vnode.attrs.branchPos);
+                }},"+")
+            ])
         ])
     }
 }

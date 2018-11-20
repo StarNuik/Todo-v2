@@ -1,82 +1,82 @@
 [
     {
         "name": "project 1",
-        "id": 0,
+        "id": "123R",
         "order": 0,
         "branches": [
             {
                 "name": "feature 1",
-                "id": 0,
+                "id": "0000",
                 "order": 0,
                 "leaves": [
                     {
                         "name": "task 1",
                         "id": "abcd",
                         "order": 0,
-                        "done": false
+                        "state": false
                     },{
                         "name": "task 2",
-                        "id": "abcd",
+                        "id": "efgh",
                         "order": 1,
-                        "done": true
+                        "state": true
                     }
                 ]
             },{
                 "name": "feature 2",
-                "id": 0,
+                "id": "0001",
                 "order": 1,
                 "leaves": [
                     {
                         "name": "task 3",
-                        "id": "abcd",
+                        "id": "ijkl",
                         "order": 0,
-                        "done": true
+                        "state": true
                     },{
                         "name": "task 4",
-                        "id": "abcd",
+                        "id": "mnop",
                         "order": 1,
-                        "done": false
+                        "state": false
                     }
                 ]
             }
         ]
     },{
         "name": "project 2",
-        "id": 0,
+        "id": "sfwE",
         "order": 1,
         "branches": [
             {
                 "name": "feature 3",
-                "id": 0,
+                "id": "0024",
                 "order": 0,
                 "leaves": [
                     {
                         "name": "task 5",
-                        "id": "abcd",
+                        "id": "qrst",
                         "order": 0,
-                        "done": true
+                        "state": true
                     },{
                         "name": "task 6",
-                        "id": "abcd",
+                        "id": "yvwx",
                         "order": 1,
-                        "done": true
+                        "state": true
                     }
                 ]
             },{
                 "name": "feature 4",
-                "id": 0,
+                "id": "2345",
                 "order": 1,
                 "leaves": [
                     {
                         "name": "task 7",
-                        "id": "abcd",
+                        "id": "yz12",
                         "order": 0,
-                        "done": false
+                        "state": false
                     },{
                         "name": "task 8",
-                        "id": "abcd",
+                        "id": "3456",
                         "order": 1,
-                        "done": false
+                        "state": false
                     }
                 ]
             }
