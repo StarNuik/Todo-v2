@@ -1,5 +1,42 @@
+@font-face {
+    font-family: "TTDrugs";
+    src: url(./font/TTDrugs-Thin.otf);
+}
+@select: rgb(40, 207, 68);
+@create: rgb(38, 47, 168);
+@edit: rgb(218, 214, 31);
+@delete: rgb(197, 20, 20);
+
 body {
-    background-color: cadetblue;
+    color: white;
+    background-color: dimgray;
+    font-family: "TTDrugs";
+    font-size: 20px;
+}
+debug {
+    .debug-buttons {
+        &-edit {
+            margin: 0px 5px;
+            &:hover {
+                background-color: @edit;
+            }
+        }
+        &-delete {
+            padding: 0px 5px;
+            &:hover {
+                background-color: @delete;
+            }
+        }
+    }
+    &-tree {
+        .debug-buttons;
+    }
+    &-branch{
+        .debug-buttons;
+    }
+    &-leaf {
+        .debug-buttons;
+    }
 }
 home {
     display: flex;
@@ -14,7 +51,7 @@ home {
         &-button {
             padding: 5px;
             &:hover {
-                background-color: aqua;
+                background-color: @create;
             }
         }
     }
@@ -23,13 +60,13 @@ home-tree {
     &-add-button {
         padding: 5px;
         &:hover {
-            background-color: aqua;
+            background-color: @create;
         }
     }
     &-label {
         margin: 0px 0px 0px 20px;
         &:hover {
-            background-color: aqua;
+            background-color: @select;
         }
     }
 }
@@ -42,7 +79,7 @@ home-branch {
             margin: 0px 0px 0px 10px;
             padding: 5px;
             &:hover {
-                background-color: aqua;
+                background-color: @create;
             }
         }
     }

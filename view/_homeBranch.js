@@ -16,7 +16,6 @@ class branch {
     view(vnode) {
         this.label = vnode.attrs.label;
         this.leaves = vnode.attrs.leaves
-        // this.pos = vnode.attrs.pos;
         return m("home-branch", [
             m("home-branch-label", this.label),
             this.leaves.map((singleLeaf) => {
@@ -25,7 +24,7 @@ class branch {
             m("home-branch-add", [
                 m("home-branch-add-label", "New task"),
                 m("home-branch-add-button", {onclick: () => {
-                    d.toAddLeaf(vnode.attrs.treePos, vnode.attrs.branchPos);
+                    d.toAddLeaf(vnode.attrs.branchPos);
                 }},"+")
             ])
         ])

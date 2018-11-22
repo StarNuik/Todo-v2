@@ -18,7 +18,7 @@ class example {
                 d.toAddTree();
                 // console.log('asd')
             }}, "+"),
-            d.rawData.map((singleTree, i) => {
+            d.db.map((singleTree, i) => {
                 return m("home-tree-label", {onclick: () => {
                     d.toSetTree(i);
                     // console.log('asd')

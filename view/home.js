@@ -14,7 +14,7 @@ class home {
         eless({source: './style/home.less'}); 
     }
     oncreate() {
-        //
+        //✎✓⯆⯈★☆🗑⌬＋
     }
     view() {
         return m("home", [
@@ -22,16 +22,16 @@ class home {
             this.treeCheck(),
             m("home-add-branch", [
                 m("home-add-branch-button", {onclick: () => {
-                    d.toAddBranch(d.currentTree.order);
+                    d.toAddBranch();
                 }}, "+"),
                 m("home-add-branch-label", "Add a branch")
             ])
         ]);
     }
     treeCheck() {
-        if (d.currentTree.branches !== undefined) {
-            return d.currentTree.branches.map((singleBranch, i) => {
-                return m(branch, {label: singleBranch.name, leaves: singleBranch.leaves, branchPos: singleBranch.order, treePos: d.currentTree.order});
+        if (d.db[d.currentTree] !== undefined && d.db[d.currentTree].branches !== undefined) {
+            return d.db[d.currentTree].branches.map((singleBranch, i) => {
+                return m(branch, {label: singleBranch.name, leaves: singleBranch.leaves, branchPos: singleBranch.order});
             });
         } else {
             return m('home-branch-empty', 'No data in this tree. Use the button under me to create a new branch')
