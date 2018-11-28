@@ -12,30 +12,26 @@ body {
     background-color: dimgray;
     font-family: "TTDrugs";
     font-size: 20px;
+
+    cursor: default;
+    user-select: none;
 }
-debug {
-    .debug-buttons {
-        &-edit {
-            margin: 0px 5px;
-            &:hover {
-                background-color: @edit;
-            }
+wrap-context {
+    width: max-content;
+    background-color: @edit;
+}
+con-box {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    background-color: gray;
+    font-size: 16px;
+    &-item {
+        margin: 3px;
+        padding: 4px;
+        &:hover {
+            background-color: lightgray;
         }
-        &-delete {
-            padding: 0px 5px;
-            &:hover {
-                background-color: @delete;
-            }
-        }
-    }
-    &-tree {
-        .debug-buttons;
-    }
-    &-branch{
-        .debug-buttons;
-    }
-    &-leaf {
-        .debug-buttons;
     }
 }
 home {
@@ -74,6 +70,9 @@ home-branch {
     display: flex;
     flex-direction: column;
     margin: 20px 0px 0px 40px;
+    &-label {
+        //
+    }
     &-add {
         &-button {
             margin: 0px 0px 0px 10px;

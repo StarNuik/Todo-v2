@@ -209,6 +209,22 @@ class Data {
     renameLeaf(newName, targetPos, parentPos, targetId) {
         this.db[d.currentTree].branches[parentPos].leaves[targetPos].name = newName;
     }
+    deleteTree(targetPos, targetId) {
+        this.db.splice(targetPos, 1);
+        // If id check is present, don't forget to delete ids from the idList!
+    }
+    deleteBranch(targetPos, targetId) {
+        this.db[this.currentTree].branches.splice(targetPos, 1);
+        // If id check is present, don't forget to delete ids from the idList!
+    }
+    deleteLeaf(targetPos, parentPos, targetId) {
+        this.db[this.currentTree].branches[parentPos].leaves.splice(targetPos, 1);
+        // If id check is present, don't forget to delete ids from the idList!
+    }
+    stateLeaf(targetPos, parentPos, targetId) {
+        let leaf = this.db[this.currentTree].branches[parentPos].leaves[targetPos];
+        leaf.state = !leaf.state;
+    }
 
     // UI calls
     // ----------CREATE----------
@@ -246,8 +262,8 @@ class Data {
     }
 
     // Change the state of the Leaf
-    toStateLeaf() {
-        //
+    toStateLeaf(targetPos, parentPos, targetId) {
+        this.stateLeaf(targetPos, parentPos, targetId);
     }
 
     // Change the position of the Tree
@@ -265,13 +281,13 @@ class Data {
 
     // ----------DELETE----------
     toDeleteTree(targetPos, targetId) {
-        //
+        this.deleteTree(targetPos, targetId);
     }
     toDeleteBranch(targetPos, targetId) {
-        //
+        this.deleteBranch(targetPos, targetId);
     }
-    toDeleteLeaf(targetPos, targetId) {
-        //
+    toDeleteLeaf(targetPos, parentPos, targetId) {
+        this.deleteLeaf(targetPos, parentPos, targetId);
     }
 }
 

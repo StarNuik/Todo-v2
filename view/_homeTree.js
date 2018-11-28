@@ -1,30 +1,23 @@
 let m = require('mithril');
 let d = require('../model/data');
+let rmbWrap = require('./_wrapContext');
+let contextTree = require('./_contextTree');
 
-class example {
-    constructor(vnode) {
-        // vnode.state is undefined at this point
-        // this.kind = vnode.attrs.name;
-    }
-    oninit() {
-        //
-    }
-    oncreate() {
-        //
-    }
-    view(vnode) {
+class treeMenu {
+    view() {
         return m("home-tree", [
             m("home-tree-add-button", {onclick: () => {
                 d.toAddTree();
-                // console.log('asd')
             }}, "+"),
             d.db.map((singleTree, i) => {
-                return m("home-tree-label", {onclick: () => {
-                    d.toSetTree(i);
-                    // console.log('asd')
-                }}, singleTree.name);
+                return m(rmbWrap,
+                    {display: contextTree, send: {treePos: i, treeId: singleTree.id}},
+                    m("home-tree-label", {onclick: () => {
+                        d.toSetTree(i);
+                    }}, singleTree.name)
+                );
             })
         ])
     }
 }
-module.exports = example;
+module.exports = treeMenu;
