@@ -1,5 +1,5 @@
 let m = require('mithril');
-let d = require('../model/data');
+let ui = require('../model/uiCalls');
 let leaf = require("./_homeLeaf");
 let rmbWrap = require('./_wrapContext');
 let contextBranch = require('./_contextBranch');
@@ -11,14 +11,14 @@ class branch {
         let branchPos = vnode.attrs.branchPos;
         
         return m("home-branch", [
-            m(rmbWrap, {display: contextBranch, send: {branchPos: branchPos}}, m("home-branch-label", label)),
+            m(rmbWrap, {display: contextBranch, send: {branchPos: branchPos, renameTarget: vnode, oldName: label}}, m("home-branch-label", label)),
             leaves.map((singleLeaf, i) => {
-                return m(leaf, {label: singleLeaf.name, state: singleLeaf.state, leafPos: i, parentPos: branchPos})
+                return m(leaf, {label: singleLeaf.name, state: singleLeaf.state, leafPos: i, branchPos: branchPos})
             }),
             m("home-branch-add", [
                 m("home-branch-add-label", "New task"),
                 m("home-branch-add-button", {onclick: () => {
-                    d.toAddLeaf(branchPos);                    
+                    ui.toAddLeaf(branchPos);                    
                 }},"+")
             ])
         ])

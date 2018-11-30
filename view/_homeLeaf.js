@@ -1,5 +1,5 @@
 let m = require('mithril');
-let d = require('../model/data');
+let ui = require('../model/uiCalls');
 let rmbWrap = require('./_wrapContext');
 let contextLeaf = require('./_contextLeaf');
 
@@ -8,12 +8,16 @@ class leaf {
         let label = vnode.attrs.label;
         let state = vnode.attrs.state;
         let leafPos = vnode.attrs.leafPos;
-        let parentPos = vnode.attrs.parentPos;
-
+        let branchPos = vnode.attrs.branchPos;
         return m("home-leaf", [
-            m(rmbWrap, {display: contextLeaf, send: {leafPos: leafPos, parentPos: parentPos}}, m("home-leaf-label", label)),
+            m(rmbWrap, {display: contextLeaf, send: {
+                leafPos: leafPos,
+                branchPos: branchPos,
+                renameTarget: vnode,
+                oldName: label
+            }}, m("home-leaf-label", label)),
             m("home-leaf-tick", {onclick: () => {
-                d.toStateLeaf(leafPos, parentPos, 'id')
+                ui.toStateLeaf(leafPos, branchPos, 'id')
             }}, state ? "V" : "X")
         ])
     }

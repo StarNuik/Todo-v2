@@ -1,18 +1,20 @@
 let m = require('mithril');
-let d = require('../model/data');
+let ui = require('../model/uiCalls');
 
 class conLeaf {
     view(vnode) {
         let leafPos = vnode.attrs.leafPos;
-        let parentPos = vnode.attrs.parentPos;
-        
+        let branchPos = vnode.attrs.branchPos;
+        let renameTarget = vnode.attrs.renameTarget;
+        let oldName = vnode.attrs.oldName;
+
         return m('con-box', [
             m('con-box-item', {onclick: () => {
-                d.toRenameLeaf("Rename worked!", leafPos, parentPos, 'id');
+                ui.showRenameLeaf(renameTarget.dom.getBoundingClientRect(), oldName, branchPos, leafPos);
             }}, 'Rename'),
             m('con-box-item', 'Move (WIP)'),
             m('con-box-item',{onclick: () => {
-                d.toDeleteLeaf(leafPos, parentPos, 'id');
+                ui.toDeleteLeaf(leafPos, branchPos, 'id');
             }}, 'Delete')
         ])
     }

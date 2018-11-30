@@ -1,7 +1,8 @@
 let m = require('mithril');
-let d = require('../model/data');
+let ui = require('../model/uiCalls');
 let branch = require('./_homeBranch');
 let tree = require('./_homeTree');
+let renameBox = require('./_renameBox');
 
 // m(rmbWrap, {display: testMenu, send: {abc: 'abxc'}}, m("debug-text", "Button 1")) ✎✓⯆⯈★☆🗑⌬＋
 
@@ -19,16 +20,16 @@ class home {
             this.treeCheck(),
             m("home-add-branch", [
                 m("home-add-branch-button", {onclick: () => {
-                    d.toAddBranch();
+                    ui.toAddBranch();
                 }}, "+"),
                 m("home-add-branch-label", "Add a branch")
-            ])
-            
+            ]),
+            ui.rename.show ? m(renameBox, {oldName: ui.rename.oldName, call: ui.rename.call, targetRect: ui.rename.targetRect}) : ""
         ]);
     }
     treeCheck() {
-        if (d.db[d.currentTree] !== undefined && d.db[d.currentTree].branches !== undefined) {
-            return d.db[d.currentTree].branches.map((singleBranch, i) => {
+        if (ui.curTree !== undefined && ui.curTree.branches !== undefined) {
+            return ui.curTree.branches.map((singleBranch, i) => {
                 return m(branch, {label: singleBranch.name, leaves: singleBranch.leaves, branchPos: i});
             });
         } else {
