@@ -2,7 +2,7 @@ let m = require('mithril');
 let c = require('../model/contextHandle');
 
 // Usage example:                                             \/ Whatever element you want to wrap around
-// m(wrapper, {display: contextMenu, send: {ex: 'example'}}, m("wrapped-element", "Element 1"));
+// m(wrapper, {display: contextMenu, send: {ex: 'example'}}, m("wrapped-element", "Element 1"))
 //  Displayed component    /\                  /\ Paremeter object, sent through usual vnode.attrs              
 
 class contextHandle {

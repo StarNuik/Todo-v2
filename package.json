@@ -20,6 +20,7 @@
     "electron": "^3.0.3"
   },
   "dependencies": {
+    "@shopify/draggable": "^1.0.0-beta.8",
     "electron-less": "^1.1.0",
     "mithril": "^1.1.6"
   }

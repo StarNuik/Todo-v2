@@ -12,7 +12,9 @@ class conBranch {
                 // ui.toRenameBranch("Rename worked!", branchPos, 'id');
                 ui.showRenameBranch(renameTarget.dom.getBoundingClientRect(), oldName, branchPos);
             }}, 'Rename'),
-            m('con-box-item', 'Move (WIP)'),
+            m('con-box-item', {onclick: () => {
+                ui.startBranchesMove();
+            }}, 'Move'),
             m('con-box-item',{onclick: () => {
                 ui.toDeleteBranch(branchPos, 'id');
             }}, 'Delete')

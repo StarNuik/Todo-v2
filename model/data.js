@@ -63,14 +63,33 @@ class Tree extends GenericItem {
         super(newName, newOrder);
         this.branches = [];
     }
-    // lookForBranch(targetId) {
-    //     //
-    // }
+    sortBranches() {
+        this.branches.sort(this.compare);
+    }
+    compare(branch1, branch2) {
+        return branch1.order - branch2.order;
+    }
+    setOrder() {
+        this.branches.forEach((branch, i) => {
+            branch.order = i;
+        });
+    }
 }
 class Branch extends GenericItem {
     constructor(newName, newOrder) {
         super(newName, newOrder);
         this.leaves = [];
+    }
+    sortLeaves() {
+        this.leaves.sort(this.compare);
+    }
+    compare(leaf1, leaf2) {
+        return leaf1.order - leaf2.order;
+    }
+    setOrder() {
+        this.leaves.forEach((leaf, i) => {
+            leaf.order = i;
+        });
     }
 }
 class Leaf extends GenericItem {
@@ -136,9 +155,11 @@ class Data {
         });
         return newData;
     }
+    // Sends a single tree to the ui interface
     pullTree(treePos) {
         return this.db[treePos];
     }
+    // Sends a list of available tree to the ui interface
     pullTreeList() {
         let list = this.db.map((item) => {
             let listItem = {};
@@ -147,6 +168,12 @@ class Data {
             return listItem;
         });
         return list;
+    }
+    // setOrder for the main array
+    setOrder() {
+        this.db.forEach((tree, i) => {
+            tree.order = i;
+        });
     }
 
     // DB operations
@@ -210,6 +237,32 @@ class Data {
     stateLeaf(treePos, branchPos, leafPos) {
         let leaf = this.db[treePos].branches[branchPos].leaves[leafPos];
         leaf.state = !leaf.state;
+    }
+    reorderLeaf(treePos, branchPos, leafPos, leafNewPos) {
+        let parentBranch = this.db[treePos].branches[branchPos];
+        let movedLeaf = parentBranch.leaves[leafPos];
+        parentBranch.leaves.splice(leafPos, 1);
+        parentBranch.leaves.splice(leafNewPos, 0, movedLeaf);
+        parentBranch.setOrder();
+        // console.log(parentBranch.leaves);
+        // console.log(this.db[treePos].branches[branchPos].leaves)
+        // this.db[treePos].branches[branchPos].sortLeaves();
+        // console.log(this.db[treePos].branches[branchPos].leaves)
+    }
+    reorderBranch(treePos, branchPos, branchNewPos) {
+        let parentTree = this.db[treePos];
+        let movedBranch = parentTree.branches[branchPos];
+        parentTree.branches.splice(branchPos, 1);
+        parentTree.branches.splice(branchNewPos, 0, movedBranch);
+        parentTree.setOrder();
+    }
+    reorderTree(treePos, treeNewPos) {
+        let target = this.db[treePos];
+        this.db.splice(treePos, 1);
+        this.db.splice(treeNewPos, 0, target);
+        this.db.forEach((tree, i) => {
+            tree.order = i;
+        });
     }
 }
 

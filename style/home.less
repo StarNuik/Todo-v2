@@ -16,9 +16,74 @@ body {
     cursor: default;
     user-select: none;
 }
+home {
+    display: flex;
+    flex-direction: column;
+    &-add-branch {
+        margin: 20px 0px 0px 40px;
+        display: flex;
+        flex-direction: row;
+        &-label {
+            margin: 0px 0px 0px 10px;
+        }
+        &-button {
+            padding: 5px;
+            &:hover {
+                background-color: @select;
+            }
+        }
+    }
+    &-branch {
+        &-finishMove {
+            &:hover {
+                background-color: @select;
+            }
+            margin: 20px 0px 0px 40px;
+        }
+        &-empty {
+            //
+        }
+    }
+}
+wrap-drag {
+    &.draggable-container--is-dragging {
+        background-color: darkred;
+    }
+    &.draggable-container--placed {
+        background-color: darkgreen;
+    }
+    // &.draggable-container--over {
+    //     background-color: darkgoldenrod;
+    // }
+    &-item {
+        // font-size: 30px;
+        // margin: 20px;
+        &.dragged {
+            // background-color: aqua;
+        }
+        // &.draggable-source--is-dragging {
+        //     background-color: lightcoral;
+        // }
+        &.draggable-source--placed {
+            background-color: lightgreen;
+        }
+        &.draggable--over {
+            background-color: lightgoldenrodyellow;
+        }
+        // &.draggable--original {
+        //     background-color: pink;
+        // }
+        &.draggable-mirror {
+            background-color: black;
+        }
+    }
+    
+}
 wrap-context {
     width: max-content;
-    background-color: @edit;
+    &:hover {
+        background-color: @edit;
+    }
 }
 con-box {
     position: fixed;
@@ -42,22 +107,9 @@ rename-box {
         font-family: "TTDrugs";
         font-size: 20px;
     }
-}
-home {
-    display: flex;
-    flex-direction: column;
-    &-add-branch {
-        margin: 20px 0px 0px 40px;
-        display: flex;
-        flex-direction: row;
-        &-label {
-            margin: 0px 0px 0px 10px;
-        }
-        &-button {
-            padding: 5px;
-            &:hover {
-                background-color: @create;
-            }
+    &-accept {
+        &:hover {
+            background-color: @select;
         }
     }
 }
@@ -65,11 +117,16 @@ home-tree {
     &-add-button {
         padding: 5px;
         &:hover {
-            background-color: @create;
+            background-color: @select;
         }
     }
     &-label {
         margin: 0px 0px 0px 20px;
+        &:hover {
+            background-color: @select;
+        }
+    }
+    &-finishMove {
         &:hover {
             background-color: @select;
         }
@@ -79,6 +136,10 @@ home-branch {
     display: flex;
     flex-direction: column;
     margin: 20px 0px 0px 40px;
+    & wrap-drag {
+        display: flex;
+        flex-direction: column;
+    }
     &-label {
         //
     }
@@ -87,7 +148,7 @@ home-branch {
             margin: 0px 0px 0px 10px;
             padding: 5px;
             &:hover {
-                background-color: @create;
+                background-color: @select;
             }
         }
     }
@@ -95,5 +156,8 @@ home-branch {
 home-leaf {
     &-tick {
         margin: 0px 0px 0px 10px;
+        &:hover {
+            background-color: @select;
+        }
     }
 }

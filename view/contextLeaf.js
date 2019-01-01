@@ -12,7 +12,9 @@ class conLeaf {
             m('con-box-item', {onclick: () => {
                 ui.showRenameLeaf(renameTarget.dom.getBoundingClientRect(), oldName, branchPos, leafPos);
             }}, 'Rename'),
-            m('con-box-item', 'Move (WIP)'),
+            m('con-box-item', {onclick: () => {
+                ui.startLeavesMove(branchPos);
+            }}, 'Move'),
             m('con-box-item',{onclick: () => {
                 ui.toDeleteLeaf(leafPos, branchPos, 'id');
             }}, 'Delete')

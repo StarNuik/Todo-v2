@@ -8,8 +8,21 @@ class ui {
         this.curTree = {};
         // this.curTree.order = 0;
         this.treeList = [];
-        this.rename = {};
-        this.rename.show = false;
+        this.rename = {
+            show: false,
+            oldName: undefined,
+            targetRect: undefined
+        };
+        this.moveLeaves = {
+            show: false,
+            branch: undefined
+        };
+        this.moveBranches = {
+            show: false
+        };
+        this.moveTrees = {
+            show: false
+        };
 
         this.readData();        
     }
@@ -33,54 +46,93 @@ class ui {
     refresh(treePos = this.curTree.order) {
         this.treeList = d.pullTreeList();
         this.curTree = d.pullTree(treePos);
+        // console.log(this.curTree.branches[0].leaves)
     }
     // Whatever
     render() {
         m.redraw();
     }
 
-    // Collects the data, necessary for the rename box to function.
-    showRenameTree(targetRect, oldName, treePos) {
+    // Stops all UI interactions (hides rename box and finishes drag&sort)
+    resetStates() {
+        this.rename.show = false;
+        this.moveLeaves.show = false;
+        this.moveBranches.show = false;
+    }
+
+    // Generic rename box init
+    showRenameGeneric(targetRect, oldName) {
+        this.resetStates();
         this.rename.show = true;
         this.rename.oldName = oldName;
         this.rename.targetRect = targetRect;
+    }
+
+    // Collects the data, necessary for the rename box to function.
+    showRenameTree(targetRect, oldName, treePos) {
+        this.resetStates();
+        this.showRenameGeneric(targetRect, oldName);
         this.rename.call = (newName) => {
             this.toRenameTree(newName, treePos, 'id');
             this.rename.show = false;
         }
     }
     showRenameBranch(targetRect, oldName, branchPos) {
-        this.rename.show = true;
-        this.rename.oldName = oldName;
-        this.rename.targetRect = targetRect;
+        this.resetStates();
+        this.showRenameGeneric(targetRect, oldName);
         this.rename.call = (newName) => {
             this.toRenameBranch(newName, branchPos, 'id');
             this.rename.show = false;
         }
     }
     showRenameLeaf(targetRect, oldName, branchPos, leafPos) {
-        this.rename.show = true;
-        this.rename.oldName = oldName;
-        this.rename.targetRect = targetRect;
+        this.resetStates();
+        this.showRenameGeneric(targetRect, oldName);
         this.rename.call = (newName) => {
             this.toRenameLeaf(newName, leafPos, branchPos, 'id');
             this.rename.show = false;
         }
-    }    
+    }
+    
+    startLeavesMove(branchPos) {
+        this.resetStates();
+        this.moveLeaves.show = true;
+        this.moveLeaves.branch = branchPos;
+    }
+    stopLeavesMove() {
+        this.moveLeaves.show = false;
+    }
+    startBranchesMove() {
+        this.resetStates();
+        this.moveBranches.show = true;
+    }
+    stopBranchesMove() {
+        this.moveBranches.show = false;
+    }
+    startTreeMove() {
+        this.resetStates();
+        this.moveTrees.show = true;
+    }
+    stopTreeMove() {
+        this.moveTrees.show = false;
+    }
 
     // ----------CREATE----------
     // Create a new Tree
     toAddTree() {
+        this.resetStates();
         d.createTree();
         this.refresh();
     }
     // Create a new Branch
     toAddBranch() {
+        this.resetStates();
         d.createBranch(this.curTree.order);
         this.refresh();
     }
     // Create a new Leaf
     toAddLeaf(branchPos) {
+        this.resetStates();
         d.createLeaf(this.curTree.order, branchPos);
         this.refresh();
     }
@@ -88,6 +140,7 @@ class ui {
     // ----------READ----------
     // Change currently viewed tree
     toSetTree(treePos) {
+        this.resetStates();
         this.refresh(treePos);
     }
 
@@ -117,28 +170,36 @@ class ui {
 
     // ----------MOVE----------
     // Change the position of the Tree
-    toOrderTree() {
-        //
+    toOrderTree(treePos, treeNewPos) {
+        d.reorderTree(treePos, treeNewPos);
+        this.refresh();
     }
     // Change the position of the Branch
-    toOrderBranch() {
-        //
+    toOrderBranch(branchPos, branchNewPos) {
+        d.reorderBranch(this.curTree.order, branchPos, branchNewPos);
+        this.refresh();
+        // this.render();
     }
     // Change the position of the Leaf
-    toOrderLeaf() {
-        //
+    toOrderLeaf(branchPos, leafPos, leafNewPos) {
+        d.reorderLeaf(this.curTree.order, branchPos, leafPos, leafNewPos);
+        this.refresh();
+        this.render() // This is a bad bug-prevention. Otherwise, after drag-sorting, state change procs in the last dragged element
     }
 
     // ----------DELETE----------
     toDeleteTree(treePos, targetId) {
+        this.resetStates();
         d.deleteTree(treePos);
         this.refresh(0);
     }
     toDeleteBranch(branchPos, targetId) {
+        this.resetStates();
         d.deleteBranch(this.curTree.order, branchPos);
         this.refresh();
     }
     toDeleteLeaf(leafPos, branchPos, targetId) {
+        this.resetStates();
         d.deleteLeaf(this.curTree.order, branchPos, leafPos);
         this.refresh();
     }

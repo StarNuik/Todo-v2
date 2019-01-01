@@ -1,7 +1,7 @@
 let m = require('mithril');
 let ui = require('../model/uiCalls');
-let rmbWrap = require('./_wrapContext');
-let contextLeaf = require('./_contextLeaf');
+let rmbWrap = require('./wrapContext');
+let contextLeaf = require('./contextLeaf');
 
 class leaf {
     view(vnode) {
@@ -18,6 +18,7 @@ class leaf {
             }}, m("home-leaf-label", label)),
             m("home-leaf-tick", {onclick: () => {
                 ui.toStateLeaf(leafPos, branchPos, 'id')
+                // console.log(ui.curTree.branches[branchPos].leaves)
             }}, state ? "V" : "X")
         ])
     }
