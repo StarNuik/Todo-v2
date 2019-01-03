@@ -9,7 +9,7 @@ class contextHandle {
     constructor(vnode) {
         this.state = false;
     }
-    oninit(vnode) {
+    setupPackage(vnode) {
         // Merge attributes to send with oncreate function for the context box
         this.send = vnode.attrs.send;
         this.send.oncreate = (vnode) => {
@@ -22,9 +22,6 @@ class contextHandle {
                 })
             }
         }
-    }
-    oncreate() {
-        //
     }
     closeSelf() {
         this.state = false;
@@ -49,6 +46,7 @@ class contextHandle {
         });
     }
     view(vnode) {
+        this.setupPackage(vnode);
         return [
             m("wrap-context", {
                 oncontextmenu: () => {

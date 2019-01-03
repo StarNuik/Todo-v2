@@ -9,7 +9,6 @@ class conBranch {
 
         return m('con-box', [
             m('con-box-item', {onclick: () => {
-                // ui.toRenameBranch("Rename worked!", branchPos, 'id');
                 ui.showRenameBranch(renameTarget.dom.getBoundingClientRect(), oldName, branchPos);
             }}, 'Rename'),
             m('con-box-item', {onclick: () => {

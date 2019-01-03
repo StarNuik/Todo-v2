@@ -11,14 +11,13 @@ class leaf {
         let branchPos = vnode.attrs.branchPos;
         return m("home-leaf", [
             m(rmbWrap, {display: contextLeaf, send: {
-                leafPos: leafPos,
+                leafPos: vnode.attrs.leafPos,
                 branchPos: branchPos,
                 renameTarget: vnode,
                 oldName: label
             }}, m("home-leaf-label", label)),
             m("home-leaf-tick", {onclick: () => {
                 ui.toStateLeaf(leafPos, branchPos, 'id')
-                // console.log(ui.curTree.branches[branchPos].leaves)
             }}, state ? "V" : "X")
         ])
     }

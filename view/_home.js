@@ -6,16 +6,22 @@ let branch = require('./homeBranch');
 let renameBox = require('./renameBox');
 let dragWrap = require('./wrapDragList');
 
+let data = require('../model/data')
+
 // m(rmbWrap, {display: testMenu, send: {abc: 'abxc'}}, m("debug-text", "Button 1")) ✎✓⯆⯈★☆🗑⌬＋
 
 class home {
     oninit() {
         let eless = require('electron-less');
         eless({source: './style/home.less'}); 
+        this.i = 0;
     }
 
     view() {
         return m("home", [
+            m('debug', {onclick: () => {
+                console.log(data.db);
+            }}, 'Click for debug'),
             m(tree),
             this.branchesElem(),
             this.finishSort(),
@@ -44,7 +50,6 @@ class home {
     sortCheck() {
         if (ui.moveBranches.show) {
             return m(dragWrap, {sortCall: (oldIndex, newIndex) => {
-                console.log('abc')
                 ui.toOrderBranch(oldIndex, newIndex);
             }}, this.treeCheck());
         } else {

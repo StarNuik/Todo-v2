@@ -1,55 +1,44 @@
 [
     {
-        "name": "project 1",
-        "id": "123R",
-        "order": 0,
+        "name": "Todo v2",
         "branches": [
             {
-                "name": "feature 1",
-                "id": "0000",
-                "order": 0,
+                "name": "Back end",
                 "leaves": [
                     {
-                        "name": "1",
-                        "id": "abcd",
-                        "order": 0,
+                        "name": "Saving",
                         "state": false
                     },{
-                        "name": "2",
-                        "id": "efgh",
-                        "order": 1,
-                        "state": true
+                        "name": "Non-mutative changes",
+                        "state": false
                     },{
-                        "name": "3",
-                        "id": "efgh",
-                        "order": 2,
-                        "state": true
+                        "name": "Create opens rename box",
+                        "state": false
                     },{
-                        "name": "4",
-                        "id": "efgh",
-                        "order": 3,
-                        "state": true
+                        "name": "Enter to finish",
+                        "state": false
                     },{
-                        "name": "5",
-                        "id": "efgh",
-                        "order": 4,
-                        "state": true
+                        "name": "Ctrl+Z",
+                        "state": false
                     }
                 ]
             },{
-                "name": "feature 2",
-                "id": "0001",
-                "order": 1,
+                "name": "Sort test",
                 "leaves": [
                     {
-                        "name": "task 3",
-                        "id": "ijkl",
-                        "order": 0,
+                        "name": "Item #1",
                         "state": true
                     },{
-                        "name": "task 4",
-                        "id": "mnop",
-                        "order": 1,
+                        "name": "Item #2",
+                        "state": false
+                    },{
+                        "name": "Item #3",
+                        "state": false
+                    },{
+                        "name": "Item #4",
+                        "state": false
+                    },{
+                        "name": "Item #5",
                         "state": false
                     }
                 ]
@@ -57,40 +46,26 @@
         ]
     },{
         "name": "project 2",
-        "id": "sfwE",
-        "order": 1,
         "branches": [
             {
                 "name": "feature 3",
-                "id": "0024",
-                "order": 0,
                 "leaves": [
                     {
                         "name": "task 5",
-                        "id": "qrst",
-                        "order": 0,
                         "state": true
                     },{
                         "name": "task 6",
-                        "id": "yvwx",
-                        "order": 1,
                         "state": true
                     }
                 ]
             },{
                 "name": "feature 4",
-                "id": "2345",
-                "order": 1,
                 "leaves": [
                     {
                         "name": "task 7",
-                        "id": "yz12",
-                        "order": 0,
                         "state": false
                     },{
                         "name": "task 8",
-                        "id": "3456",
-                        "order": 1,
                         "state": false
                     }
                 ]
