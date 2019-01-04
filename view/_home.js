@@ -20,8 +20,22 @@ class home {
     view() {
         return m("home", [
             m('debug', {onclick: () => {
-                console.log(data.db);
-            }}, 'Click for debug'),
+                // console.log(ui.treeCurrent);
+                // ui.test()
+                console.log(data.history.log)
+            }}, ' Click for debug '),
+            m('debug', {onclick: () => {
+                // console.log(ui.treeCurrent);
+                // ui.test()
+                // console.log(data.history)
+                data._historyUndo();
+            }}, 'Undo'),
+            m('debug', {onclick: () => {
+                // console.log(ui.treeCurrent);
+                // ui.test()
+                // console.log(data.history)
+                data._historyRedo();
+            }}, 'Redo'),
             m(tree),
             this.branchesElem(),
             this.finishSort(),
@@ -57,14 +71,14 @@ class home {
         }
     }
     treeCheck() {
-        if (ui.curTree !== undefined && ui.curTree.branches !== undefined) {
+        if (ui.treeCurrent !== undefined && ui.treeCurrent.branches !== undefined) {
             return this.drawBranches();
         } else {
             return m('home-branch-empty', 'No data in this tree. Use the button under me to create a new branch')
         }
     }
     drawBranches() {
-        return ui.curTree.branches.map((singleBranch, i) => {
+        return ui.treeCurrent.branches.map((singleBranch, i) => {
             return m(branch, {label: singleBranch.name, leaves: singleBranch.leaves, branchPos: i});
         });
     }

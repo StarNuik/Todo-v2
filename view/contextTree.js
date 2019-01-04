@@ -15,7 +15,7 @@ class conTree {
                 ui.startTreeMove();
             }}, 'Move (WIP)'),
             m('con-box-item', {onclick: () => {
-                ui.toDeleteTree(treePos, 'id');
+                ui.toDeleteTree(treePos);
             }}, 'Delete')
         ])
     }

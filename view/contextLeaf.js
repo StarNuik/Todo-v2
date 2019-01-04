@@ -16,7 +16,7 @@ class conLeaf {
                 ui.startLeavesMove(branchPos);
             }}, 'Move'),
             m('con-box-item',{onclick: () => {
-                ui.toDeleteLeaf(leafPos, branchPos, 'id');
+                ui.toDeleteLeaf(branchPos, leafPos);
             }}, 'Delete')
         ])
     }

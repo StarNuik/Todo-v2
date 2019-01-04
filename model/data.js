@@ -74,7 +74,12 @@ class Leaf extends GenericItem {
 //Actual data handling goes here
 class Data {
     constructor() {
-        // this.db = []; // Lets the UI know if the db is an udefined
+        // this.db = []; // Lets the UI know if the db is an undefined
+        this.history = {
+            log: [],
+            depth: 0,
+            depthMax: 5
+        };
         this.callOnLoad = () => {};
 
         this._readData();
@@ -127,6 +132,91 @@ class Data {
         }
     }
 
+    _historyClean() {
+        if (this.history.depth > 0) {
+            this.history.log.splice(0, this.history.depth)
+            this.history.depth = 0;
+        }
+        if (this.history.log.length >= this.history.depthMax) {
+            this.history.log.pop();
+        }
+    }
+    _historyLog(actionType, args) {
+        this._historyClean();
+        // console.log(arguments)
+
+        let log = {
+            type: actionType,
+            location: arguments[1],
+            pos: arguments[2]
+        }
+        switch (actionType) {
+            case 'create':
+                log.object = arguments[3];
+                break;
+            case 'delete':
+                log.object = arguments[3];
+                break;
+            case 'rename':
+                log.name = arguments[3];
+                log.nameNew = arguments[4];
+                break;
+            case 'move':
+                log.posNew = arguments[3];
+                break;
+            default:
+                return;
+        }
+        this.history.log.unshift(log);
+    }
+    _historyUndo() {
+        if (this.history.log[this.history.depth] !== undefined && this.history.depth < this.history.depthMax) {
+            let pos = this.history.depth++;
+            let log = this.history.log[pos];
+            // console.log(this.history.log)
+            // console.log(log)
+            switch (log.type) {
+                case 'create':
+                    this._deleteGeneric(log.location, log.pos);
+                    break;
+                case 'delete':
+                    log.location.splice(log.pos, 0, log.object);
+                    break;
+                case 'rename':
+                    log.location[log.pos].name = log.name;
+                    break;
+                case 'move':
+                    this._moveGeneric(log.location, log.posNew, log.pos);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    _historyRedo() {
+        if (this.history.depth > 0) {
+            let pos = --this.history.depth;
+            let log = this.history.log[pos];
+            // console.log(log);
+            switch(log.type) {
+                case 'create':
+                log.location.splice(log.pos, 0, log.object);
+                    break;
+                case 'delete':
+                    this._deleteGeneric(log.location, log.pos)
+                    break;
+                case 'rename':
+                log.location[log.pos].name = log.nameNew;
+                    break;
+                case 'move':
+                    this._moveGeneric(log.location, log.pos, log.posNew);  
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     // Sends a single tree to the UI
     pullTree(treePos) {
         let out = this.db[treePos];
@@ -156,7 +246,9 @@ class Data {
     createLeaf(treePos, branchPos) {
         let target = this.db[treePos].branches[branchPos].leaves;
         let leafNew = new Leaf("New leaf", target.length);
-        target.push(leafNew);
+        let pos = target.push(leafNew);
+
+        this._historyLog('create', target, pos - 1, leafNew)
     }
 
     // Renaming
@@ -167,7 +259,10 @@ class Data {
         this.db[treePos].branches[branchPos].name = newName;
     }
     renameLeaf(treePos, branchPos, leafPos, newName) {
+        let oldName = this.db[treePos].branches[branchPos].leaves[leafPos].name;
         this.db[treePos].branches[branchPos].leaves[leafPos].name = newName;
+
+        this._historyLog('rename', this.db[treePos].branches[branchPos].leaves, leafPos, oldName, newName)
     }
 
     // Deletes an item
@@ -186,7 +281,10 @@ class Data {
         this._deleteGeneric(this.db[treePos].branches, branchPos);
     }
     deleteLeaf(treePos, branchPos, leafPos) {
+        let copy = this.db[treePos].branches[branchPos].leaves[leafPos];
         this._deleteGeneric(this.db[treePos].branches[branchPos].leaves, leafPos);
+
+        this._historyLog('delete', this.db[treePos].branches[branchPos].leaves, leafPos, copy)
     }
 
     // Changes the state of the leaf
@@ -202,14 +300,16 @@ class Data {
         // Insert the item at the new position
         target.splice(posNew, 0, item);
     }
-    moveLeaf(treePos, branchPos, leafPos, leafPosNew) {
-        this._moveGeneric(this.db[treePos].branches[branchPos].leaves, leafPos, leafPosNew)
+    moveTree(treePos, treePosNew) {
+        this._moveGeneric(this.db, treePos, treePosNew);
     }
     moveBranch(treePos, branchPos, branchPosNew) {
         this._moveGeneric(this.db[treePos].branches, branchPos, branchPosNew);
     }
-    moveTree(treePos, treePosNew) {
-        this._moveGeneric(this.db, treePos, treePosNew);
+    moveLeaf(treePos, branchPos, leafPos, leafPosNew) {
+        this._moveGeneric(this.db[treePos].branches[branchPos].leaves, leafPos, leafPosNew)
+
+        this._historyLog('move', this.db[treePos].branches[branchPos].leaves, leafPos, leafPosNew)
     }
 }
 

@@ -17,7 +17,7 @@ class leaf {
                 oldName: label
             }}, m("home-leaf-label", label)),
             m("home-leaf-tick", {onclick: () => {
-                ui.toStateLeaf(leafPos, branchPos, 'id')
+                ui.toStateLeaf(branchPos, leafPos);
             }}, state ? "V" : "X")
         ])
     }

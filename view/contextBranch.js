@@ -15,7 +15,7 @@ class conBranch {
                 ui.startBranchesMove();
             }}, 'Move'),
             m('con-box-item',{onclick: () => {
-                ui.toDeleteBranch(branchPos, 'id');
+                ui.toDeleteBranch(branchPos);
             }}, 'Delete')
         ])
     }

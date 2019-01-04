@@ -3,7 +3,7 @@ let m = require('mithril');
 class renameBox {
     oncreate(vnode) {
         let targetRect = vnode.attrs.targetRect;
-        vnode.dom.style = "top:" + targetRect.top + "px;left:" + targetRect.left + "px;"; 
+        vnode.dom.style = "top:" + (targetRect.top + window.scrollY) + "px;left:" + targetRect.left + "px;";
     }
     view(vnode) {
         let oldName = vnode.attrs.oldName;
