@@ -1,5 +1,5 @@
 let m = require('mithril');
-let ui = require('../model/uiCalls');
+let ui = require('../model/uiBase');
 const Sortable = require('@shopify/draggable').Sortable;
 
 // Usage example:                              \/ The function to call every time an element is moved

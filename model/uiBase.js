@@ -25,7 +25,7 @@ class ui {
             show: false
         };
 
-        this._readData();        
+        this._readData();
     }
     // If data.js hasn't fs'ed the file (which is usually the case), ask to give data when finished, otherwise read now
     _readData() {
@@ -91,6 +91,18 @@ class ui {
             this.rename.show = false;
         }
     }
+
+    // Changes the state of the Leaf
+    toStateLeaf(branchPos, leafPos) {
+        d.stateLeaf(this.treeNum, branchPos, leafPos);
+        // this._refresh();
+    }
+
+    // Changes currently viewed tree
+    toSetTree(treePos) {
+        this._resetStates();
+        this._refresh(treePos);
+    }
     
     // Tells the drag&sort component to show itself
     startTreeMove() {
@@ -127,18 +139,12 @@ class ui {
     toAddBranch() {
         this._resetStates();
         d.createBranch(this.treeNum);
-        this._refresh();
+        // this._refresh();
     }
     toAddLeaf(branchPos) {
         this._resetStates();
         d.createLeaf(this.treeNum, branchPos);
-        this._refresh();
-    }
-
-    // Changes currently viewed tree
-    toSetTree(treePos) {
-        this._resetStates();
-        this._refresh(treePos);
+        // this._refresh();
     }
 
     // Renames items
@@ -148,17 +154,11 @@ class ui {
     }
     toRenameBranch(newName, branchPos) {
         d.renameBranch(this.treeNum, branchPos, newName);
-        this._refresh();
+        // this._refresh();
     }
     toRenameLeaf(newName, branchPos, leafPos) {
         d.renameLeaf(this.treeNum, branchPos, leafPos, newName);
-        this._refresh();
-    }
-
-    // Changes the state of the Leaf
-    toStateLeaf(branchPos, leafPos) {
-        d.stateLeaf(this.treeNum, branchPos, leafPos);
-        this._refresh();
+        // this._refresh();
     }
 
     // Changes the position of items
@@ -168,12 +168,12 @@ class ui {
     }
     toOrderBranch(branchPos, branchNewPos) {
         d.moveBranch(this.treeNum, branchPos, branchNewPos);
-        this._refresh();
+        // this._refresh();
         // this.render();
     }
     toOrderLeaf(branchPos, leafPos, leafPosNew) {
         d.moveLeaf(this.treeNum, branchPos, leafPos, leafPosNew);
-        this._refresh();
+        // this._refresh();
         // this.render() // This is a bad bug-prevention. Otherwise, after drag-sorting, state change procs in the last dragged element
     }
 
@@ -181,7 +181,7 @@ class ui {
     toDeleteTree(treePos) {
         this._resetStates();
         d.deleteTree(treePos);
-        // this._refresh(0);
+        this._refresh(0);
     }
     toDeleteBranch(branchPos) {
         this._resetStates();
@@ -192,6 +192,16 @@ class ui {
         this._resetStates();
         d.deleteLeaf(this.treeNum, branchPos, leafPos);
         // this._refresh();
+    }
+
+    // History calls
+    toUndo() {
+        this._resetStates();
+        d.historyUndo();
+    }
+    toRedo() {
+        this._resetStates();
+        d.historyRedo();
     }
 }
 

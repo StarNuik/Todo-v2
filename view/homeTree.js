@@ -1,5 +1,5 @@
 let m = require('mithril');
-let ui = require('../model/uiCalls');
+let ui = require('../model/uiBase');
 let rmbWrap = require('./wrapContext');
 let dragWrap = require('./wrapDragList');
 let contextTree = require('./contextTree');

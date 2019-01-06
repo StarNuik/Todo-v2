@@ -1,5 +1,6 @@
 let m = require('mithril');
-let ui = require('../model/uiCalls');
+let ui = require('../model/uiBase');
+let k = require('../model/keyHandle');
 
 let tree = require('./homeTree');
 let branch = require('./homeBranch');
@@ -28,13 +29,14 @@ class home {
                 // console.log(ui.treeCurrent);
                 // ui.test()
                 // console.log(data.history)
-                data._historyUndo();
+                console.log(ui)
+                ui.toUndo();
             }}, 'Undo'),
             m('debug', {onclick: () => {
                 // console.log(ui.treeCurrent);
                 // ui.test()
                 // console.log(data.history)
-                data._historyRedo();
+                ui.toRedo();
             }}, 'Redo'),
             m(tree),
             this.branchesElem(),

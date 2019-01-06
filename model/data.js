@@ -132,18 +132,9 @@ class Data {
         }
     }
 
-    _historyClean() {
-        if (this.history.depth > 0) {
-            this.history.log.splice(0, this.history.depth)
-            this.history.depth = 0;
-        }
-        if (this.history.log.length >= this.history.depthMax) {
-            this.history.log.pop();
-        }
-    }
-    _historyLog(actionType, args) {
+    // Log an action for undo/redo
+    _historyLog(actionType) {
         this._historyClean();
-        // console.log(arguments)
 
         let log = {
             type: actionType,
@@ -169,7 +160,18 @@ class Data {
         }
         this.history.log.unshift(log);
     }
-    _historyUndo() {
+    // When an action happens: if there're more logged actions than maxDepth, pop the array; if an action happened in the middle of the history, delete actions until depth
+    _historyClean() {
+        if (this.history.depth > 0) {
+            this.history.log.splice(0, this.history.depth)
+            this.history.depth = 0;
+        }
+        if (this.history.log.length >= this.history.depthMax) {
+            this.history.log.pop();
+        }
+    }
+    // Undo
+    historyUndo() {
         if (this.history.log[this.history.depth] !== undefined && this.history.depth < this.history.depthMax) {
             let pos = this.history.depth++;
             let log = this.history.log[pos];
@@ -177,39 +179,40 @@ class Data {
             // console.log(log)
             switch (log.type) {
                 case 'create':
-                    this._deleteGeneric(log.location, log.pos);
+                    this._deleteGeneric(log.location, log.pos, false);
                     break;
                 case 'delete':
                     log.location.splice(log.pos, 0, log.object);
                     break;
                 case 'rename':
-                    log.location[log.pos].name = log.name;
+                    this._renameGeneric(log.location, log.pos, log.name, false);
                     break;
                 case 'move':
-                    this._moveGeneric(log.location, log.posNew, log.pos);
+                    this._moveGeneric(log.location, log.posNew, log.pos, false);
                     break;
                 default:
                     break;
             }
         }
     }
-    _historyRedo() {
+    // Redo
+    historyRedo() {
         if (this.history.depth > 0) {
             let pos = --this.history.depth;
             let log = this.history.log[pos];
             // console.log(log);
             switch(log.type) {
                 case 'create':
-                log.location.splice(log.pos, 0, log.object);
+                    log.location.splice(log.pos, 0, log.object);
                     break;
                 case 'delete':
-                    this._deleteGeneric(log.location, log.pos)
+                    this._deleteGeneric(log.location, log.pos, false);
                     break;
                 case 'rename':
-                log.location[log.pos].name = log.nameNew;
+                    this._renameGeneric(log.location, log.pos, log.nameNew, false);
                     break;
                 case 'move':
-                    this._moveGeneric(log.location, log.pos, log.posNew);  
+                    this._moveGeneric(log.location, log.pos, log.posNew, false);  
                     break;
                 default:
                     break;
@@ -233,83 +236,115 @@ class Data {
     }
 
     // DB operations
-    // Creation
-    createTree() {
-        let treeNew = new Tree("New tree", this.db.length);
-        this.db.push(treeNew);
-    }
-    createBranch(treePos) {
-        let target = this.db[treePos].branches;
-        let branchNew = new Branch("New branch", target.length);
-        target.push(branchNew);
-    }
-    createLeaf(treePos, branchPos) {
-        let target = this.db[treePos].branches[branchPos].leaves;
-        let leafNew = new Leaf("New leaf", target.length);
-        let pos = target.push(leafNew);
-
-        this._historyLog('create', target, pos - 1, leafNew)
-    }
-
-    // Renaming
-    renameTree(treePos, newName) {
-        this.db[treePos].name = newName;
-    }
-    renameBranch(treePos, branchPos, newName) {
-        this.db[treePos].branches[branchPos].name = newName;
-    }
-    renameLeaf(treePos, branchPos, leafPos, newName) {
-        let oldName = this.db[treePos].branches[branchPos].leaves[leafPos].name;
-        this.db[treePos].branches[branchPos].leaves[leafPos].name = newName;
-
-        this._historyLog('rename', this.db[treePos].branches[branchPos].leaves, leafPos, oldName, newName)
-    }
-
-    // Deletes an item
-    _deleteGeneric(target, pos) {
-        // Delete target's id from the idList, just in case
-        let id = target[pos].id;
-        idList.splice(idList.indexOf(id), 1);
-
-        // Delete the item itself
-        target.splice(pos, 1);
-    }
-    deleteTree(treePos) {
-        this._deleteGeneric(this.db, treePos);
-    }
-    deleteBranch(treePos, branchPos) {
-        this._deleteGeneric(this.db[treePos].branches, branchPos);
-    }
-    deleteLeaf(treePos, branchPos, leafPos) {
-        let copy = this.db[treePos].branches[branchPos].leaves[leafPos];
-        this._deleteGeneric(this.db[treePos].branches[branchPos].leaves, leafPos);
-
-        this._historyLog('delete', this.db[treePos].branches[branchPos].leaves, leafPos, copy)
-    }
-
     // Changes the state of the leaf
     stateLeaf(treePos, branchPos, leafPos) {
         let leaf = this.db[treePos].branches[branchPos].leaves[leafPos];
         leaf.state = !leaf.state;
     }
 
+    // Creates a tree
+    createTree() {
+        let treeNew = new Tree("New tree", this.db.length);
+        let pos = this.db.push(treeNew);
+
+        this._historyLog('create', this.db, pos - 1, treeNew);
+        
+        // A less readable, but still viable option
+        // this._historyLog('create', target, this.db.push(treeNew) - 1, treeNew);
+    }
+    // Creates a branch
+    createBranch(treePos) {
+        let target = this.db[treePos].branches;
+        let branchNew = new Branch("New branch", target.length);
+        let pos = target.push(branchNew);
+
+        this._historyLog('create', target, pos - 1, branchNew);
+    }
+    // Creates a leaf
+    createLeaf(treePos, branchPos) {
+        let target = this.db[treePos].branches[branchPos].leaves;
+        let leafNew = new Leaf("New leaf", target.length);
+        let pos = target.push(leafNew);
+
+        this._historyLog('create', target, pos - 1, leafNew);
+    }
+
+    // Deletes an item in 'target' array
+    _deleteGeneric(target, pos, log = true) {
+        // Delete target's id from the idList, just in case
+        let id = target[pos].id;
+        idList.splice(idList.indexOf(id), 1);
+
+        // Log the action for undo/redo
+        if (log) {
+            this._historyLog('delete', target, pos, target[pos]);
+        }
+
+        // Delete the item itself
+        target.splice(pos, 1);
+    }
+    // Deletes a tree
+    deleteTree(treePos) {
+        this._deleteGeneric(this.db, treePos);
+    }
+    // Deletes a branch
+    deleteBranch(treePos, branchPos) {
+        this._deleteGeneric(this.db[treePos].branches, branchPos);
+    }
+    // Deletes a leaf
+    deleteLeaf(treePos, branchPos, leafPos) {
+        this._deleteGeneric(this.db[treePos].branches[branchPos].leaves, leafPos);
+    }
+
+    // Renames an item
+    _renameGeneric(target, pos, newName, log = true) {
+        if (log) {
+            this._historyLog('rename', target, pos, target[pos].name, newName);
+        }
+
+        target[pos].name = newName;
+    }
+    // Renames a tree
+    renameTree(treePos, newName) {
+        this._renameGeneric(this.db, treePos, newName);
+        // this.db[treePos].name = newName;
+    }
+    // Renames a branch
+    renameBranch(treePos, branchPos, newName) {
+        this._renameGeneric(this.db[treePos].branches, branchPos, newName);
+        // target[branchPos].name = newName;
+    }
+    // Renames a leaf
+    renameLeaf(treePos, branchPos, leafPos, newName) {
+        this._renameGeneric(this.db[treePos].branches[branchPos].leaves, leafPos, newName);
+        // target[leafPos].name = newName;        
+    }
+
     // Moves an item. Called on item drop during the drag.
-    _moveGeneric(target, pos, posNew) {
+    _moveGeneric(target, pos, posNew, log = true) {
+        // Log the action for undo/redo
+        if (log) {
+            this._historyLog('move', target, pos, posNew)
+        }
+
         // Delete and store the item
         let item = target.splice(pos, 1)[0];
         // Insert the item at the new position
         target.splice(posNew, 0, item);
     }
+    // Moves a tree
     moveTree(treePos, treePosNew) {
         this._moveGeneric(this.db, treePos, treePosNew);
     }
+    // Moves a branch
     moveBranch(treePos, branchPos, branchPosNew) {
         this._moveGeneric(this.db[treePos].branches, branchPos, branchPosNew);
     }
+    // Moves a leaf
     moveLeaf(treePos, branchPos, leafPos, leafPosNew) {
         this._moveGeneric(this.db[treePos].branches[branchPos].leaves, leafPos, leafPosNew)
 
-        this._historyLog('move', this.db[treePos].branches[branchPos].leaves, leafPos, leafPosNew)
+        // this._historyLog('move', this.db[treePos].branches[branchPos].leaves, leafPos, leafPosNew)
     }
 }
 

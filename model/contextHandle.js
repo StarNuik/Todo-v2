@@ -1,5 +1,3 @@
-let m = require('mithril');
-
 class click {
     constructor() {
         this.openMenu = null;
