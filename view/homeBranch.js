@@ -20,7 +20,9 @@ class branch {
             m("home-branch-add", [
                 m("home-branch-add-label", "New task"),
                 m("home-branch-add-button", {onclick: () => {
-                    ui.toAddLeaf(this.branchPos);                    
+                    ui.toAddLeaf(this.branchPos);
+                    // Dirty hacks \/
+                    ui.showRenameLeaf(vnode.dom.children[this.leaves.length].getBoundingClientRect(), "New leaf", this.branchPos, this.leaves.length - 1);                    
                 }},"+")
             ])
         ])

@@ -7,7 +7,7 @@ let branch = require('./homeBranch');
 let renameBox = require('./renameBox');
 let dragWrap = require('./wrapDragList');
 
-let data = require('../model/data')
+// let data = require('../model/data')
 
 // m(rmbWrap, {display: testMenu, send: {abc: 'abxc'}}, m("debug-text", "Button 1")) ✎✓⯆⯈★☆🗑⌬＋
 
@@ -20,24 +20,6 @@ class home {
 
     view() {
         return m("home", [
-            m('debug', {onclick: () => {
-                // console.log(ui.treeCurrent);
-                // ui.test()
-                console.log(data.history.log)
-            }}, ' Click for debug '),
-            m('debug', {onclick: () => {
-                // console.log(ui.treeCurrent);
-                // ui.test()
-                // console.log(data.history)
-                console.log(ui)
-                ui.toUndo();
-            }}, 'Undo'),
-            m('debug', {onclick: () => {
-                // console.log(ui.treeCurrent);
-                // ui.test()
-                // console.log(data.history)
-                ui.toRedo();
-            }}, 'Redo'),
             m(tree),
             this.branchesElem(),
             this.finishSort(),

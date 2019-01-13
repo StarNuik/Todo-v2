@@ -3,15 +3,15 @@ let m = require('mithril');
 
 class press {
     constructor() {
-        
+        this.ctrlPressed = false;
         window.addEventListener('keydown', (e) => {
             switch (e.key) {
-                case 'ArrowLeft':
-                    this.controlZ();
-                    break;
-                case 'ArrowRight':
-                    this.controlY();
-                    break;
+                // case 'ArrowLeft':
+                //     this.controlZ();
+                //     break;
+                // case 'ArrowRight':
+                //     this.controlY();
+                //     break;
                 case 'Enter':
                     this.enter();
                     break;
@@ -21,9 +21,28 @@ class press {
                 case 'Tab':
                     this.tab();
                     break;
+                case 'Control':
+                    this.ctrlPressed = true;
+                    break;
+                case 'z':
+                    if (this.ctrlPressed) {
+                        this.controlZ();
+                    }
+                    break;
+                case 'y':
+                    if (this.ctrlPressed) {
+                        this.controlY();
+                    }
+                    break;
                 // default:
-                //     console.log('other')
                 //     break;
+            }
+        });
+        window.addEventListener('keyup', (e) => {
+            switch (e.key) {
+                case 'Control':
+                    this.ctrlPressed = true;
+                    break;
             }
         });
     }
@@ -44,7 +63,7 @@ class press {
         m.redraw();
     }
     tab() {
-        //
+        ui.cycleTree();
     }
 }
 

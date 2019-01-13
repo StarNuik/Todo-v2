@@ -160,7 +160,7 @@ class Data {
         }
         this.history.log.unshift(log);
     }
-    // When an action happens: if there're more logged actions than maxDepth, pop the array; if an action happened in the middle of the history, delete actions until depth
+    // When an action happens: if there're more logged actions than 'maxDepth', pop the array; if an action happened in the middle of the history, delete actions until 'depth'
     _historyClean() {
         if (this.history.depth > 0) {
             this.history.log.splice(0, this.history.depth)

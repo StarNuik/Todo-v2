@@ -11,12 +11,20 @@ class ui {
 
         this.rename = {
             show: false,
-            oldName: undefined,
-            targetRect: undefined
+            oldName: '',
+            targetRect: '',
+            call: () => {}
         };
+        this.completeRename = {
+            newName: '',
+            treePos: 0,
+            branchPos: 0,
+            leafPos: 0,
+            type: ''
+        }
         this.moveLeaves = {
             show: false,
-            branch: undefined
+            branch: 0
         };
         this.moveBranches = {
             show: false
@@ -58,6 +66,31 @@ class ui {
         this.moveTrees.show = false;
     }
 
+    cycleTree() {
+        if (this.treeList.length > 1) {
+            this._resetStates();
+            if (this.treeNum < this.treeList.length - 1) {
+                this._refresh(this.treeNum + 1);
+                this._render();
+            } else {
+                this._refresh(0);
+                this._render();
+            }
+        }
+    }
+
+    // Changes the state of the Leaf
+    toStateLeaf(branchPos, leafPos) {
+        d.stateLeaf(this.treeNum, branchPos, leafPos);
+        // this._refresh();
+    }
+
+    // Changes currently viewed tree
+    toSetTree(treePos) {
+        this._resetStates();
+        this._refresh(treePos);
+    }
+
     // Generic rename box init
     _renameGeneric(targetRect, oldName) {
         this._resetStates();
@@ -90,18 +123,6 @@ class ui {
             this.toRenameLeaf(newName, branchPos, leafPos);
             this.rename.show = false;
         }
-    }
-
-    // Changes the state of the Leaf
-    toStateLeaf(branchPos, leafPos) {
-        d.stateLeaf(this.treeNum, branchPos, leafPos);
-        // this._refresh();
-    }
-
-    // Changes currently viewed tree
-    toSetTree(treePos) {
-        this._resetStates();
-        this._refresh(treePos);
     }
     
     // Tells the drag&sort component to show itself
